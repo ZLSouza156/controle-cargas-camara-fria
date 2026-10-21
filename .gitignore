@@ -1,0 +1,10 @@
+.gradle/
+**/build/
+local.properties
+app/src/main/assets/
+dist/
+*.jks
+*.p12
+!signing/debug.keystore
+__pycache__/
+private-signing/
