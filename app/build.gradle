@@ -1,0 +1,52 @@
+plugins { id 'com.android.application' }
+
+def signingPath = System.getenv('CAMARA_SIGNING_FILE')
+def productionSigning = signingPath != null && !signingPath.isBlank()
+android {
+    buildFeatures { buildConfig true }
+    namespace 'br.com.camarafria.controlecargas'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'br.com.camarafria.controlecargas'
+        minSdk 23
+        targetSdk 35
+        // Monotonic across repositories, without depending on the workflow run counter.
+        versionCode((System.currentTimeMillis() / 60000L).toLong().intValue())
+        versionName "1.0.${System.getenv('GITHUB_RUN_NUMBER') ?: '1'}"
+    }
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('signing/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        if (productionSigning) {
+            production {
+                storeFile file(signingPath)
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix '.teste'
+            resValue 'string', 'app_name', 'Câmara Fria · Teste'
+        }
+        release {
+            minifyEnabled false
+            resValue 'string', 'app_name', 'Controle de Cargas Câmara Fria'
+            if (productionSigning) signingConfig signingConfigs.production
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+    implementation 'androidx.core:core:1.15.0'
+}

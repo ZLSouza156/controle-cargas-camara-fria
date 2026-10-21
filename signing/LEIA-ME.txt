@@ -1,0 +1,5 @@
+A debug.keystore é uma chave de desenvolvimento de teste, com senha pública "android".
+Ela é fixa para permitir atualizar os APKs de teste deste mesmo projeto sem trocar a assinatura.
+Não utilize esta chave como assinatura privada de produção.
+Para uma versão própria de uso definitivo, siga "Assinatura para uso definitivo" no README.
+Não substitua esta chave entre builds de teste já instalados.
